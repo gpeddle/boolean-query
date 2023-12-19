@@ -44,7 +44,9 @@ Conditions are the building blocks of expressions. They consist of a property, a
 - LTE: Less Than or Equal
 - GT: Greater Than
 - GTE: Greater Than or Equal
-- NULL: Is Empty
+- NULL: Is Null
+- BLANK: Is Blank
+- EMPTY: Is Null OR Is Blank
 - SW: Starts With
 - CT: Contains
 - EW: Ends With
@@ -63,10 +65,10 @@ Conditions are the building blocks of expressions. They consist of a property, a
 
 Each Condition is enclosed by parentheses, and the internal elements are delimited by '^'. This allows for trivial parsing. 
 
-Note:
-The value part of the expression does not need to be quoted, because it will always be found following a'^' and preceding the end parenthesis. For this reason, whitespace i significant within the parentheses of a Condition expression. This is an explicit design decision.
+## Notes
+The value part of the expression does not need to be quoted, because it will always be found following a '^' character and preceding the end parenthesis. For this reason, whitespace is significant within the parentheses of a Condition expression. This is an explicit design decision.
 
-The internal parts of a Condition expression are structured with infix notation. This an explicit design decision that enables them to be easily spoken aloud when discussing. (e.g. `[AND(TEXT1^SW^O)])` would be spoken *"TEXT1 starts with 'O'"*.
+The internal parts of a Condition expression are structured with infix notation. This enables them the Condition to be easily spoken aloud when discussing. (e.g. `[AND(TEXT1^SW^O)])` would be spoken *"TEXT1 starts with 'O'"*. This an explicit design decision.
 
 
 ## Examples:
@@ -79,31 +81,38 @@ Description: Property's value must start with the specified substring.
 ### Contains
 
 Expression: `[AND(property^CT^substring)]`
+
 Description: Property's value must contain the specified substring.
 
 ### EndsWith
 
 Expression: `[AND(property^EW^substring)]`
+
 Description: Property's value must end with the specified substring.
 
 ### Logical AND
 
 Expression: `[AND(property1^EQ^value1), EQ(property2^EQ^value2)]`
+
 Description: Both conditions must be true for the expression to evaluate as true.
 
 ### Logical OR
 
 Expression: `[OR(property1^EQ^value1), (property2^EQ^value2)]`
+
 Description: Either condition must be true for the expression to evaluate as true.
 
 ### Logical NOT
 
 Expression: `[NOT(property^EQ^value)]`
+
 Description: Negates the condition, resulting in the opposite evaluation.
 
 ### Complex Expression
 
 Expression: `[OR(prop1^EQ^val1), (AND(prop2^EQ^val2), NOT(EQ(prop3^EQ^val3))))]`
+
+
 Description: A combination of conditions and logical operators, demonstrating nested expressions and negations.
 
 ## Usage
