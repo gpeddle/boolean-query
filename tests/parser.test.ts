@@ -1,7 +1,4 @@
 import {
-  AndCondition,
-  OrCondition,
-  NotCondition,
   EqualCondition,
   NotEqualCondition,
   LessThanCondition,
@@ -14,6 +11,9 @@ import {
   StartsWithCondition,
   ContainsCondition,
   EndsWithCondition,
+  AndCondition,
+  OrCondition,
+  NotCondition,
 } from "../src/parser";
 
 describe("Boolean Query Language DSL", () => {

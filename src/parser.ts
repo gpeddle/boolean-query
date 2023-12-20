@@ -26,11 +26,12 @@ enum StringValueOperator {
   EW = "EW",
 }
 
-//  interface  and base classes for conditions
+//  interface for base classes
 interface Condition {
   evaluate(obj: any): boolean;
 }
 
+// value classes
 abstract class ValueCondition implements Condition {
   constructor(
     public property: string,
@@ -46,38 +47,6 @@ abstract class ValueCondition implements Condition {
       this.operator == ValueOperator.GTE;
     if (!isValueOperator) {
       throw new Error(`Invalid ValueOperator: ${this.operator}`);
-    }
-  }
-  abstract evaluate(obj: any): boolean;
-}
-
-abstract class NonValueCondition implements Condition {
-  constructor(public property: string, public operator: NonValueOperator) {
-    let isNonValueOperator =
-      this.operator == NonValueOperator.NULL ||
-      this.operator == NonValueOperator.BLANK ||
-      this.operator == NonValueOperator.EMPTY;
-    if (!isNonValueOperator) {
-      throw new Error(
-        `Invalid conditional non-value operator: ${this.operator}`
-      );
-    }
-  }
-  abstract evaluate(obj: any): boolean;
-}
-
-abstract class StringValueCondition implements Condition {
-  constructor(
-    public property: string,
-    public operator: StringValueOperator,
-    public value: any
-  ) {
-    let isStringValueOperator =
-      this.operator == StringValueOperator.SW ||
-      this.operator == StringValueOperator.CT ||
-      this.operator == StringValueOperator.EW;
-    if (!isStringValueOperator) {
-      throw new Error(`Invalid isStringValueOperator: ${this.operator}`);
     }
   }
   abstract evaluate(obj: any): boolean;
@@ -143,6 +112,20 @@ class GreaterThanOrEqualCondition extends ValueCondition {
   }
 }
 
+// non-value classes
+abstract class NonValueCondition implements Condition {
+  constructor(public property: string, public operator: NonValueOperator) {
+    let isNonValueOperator =
+      this.operator == NonValueOperator.NULL ||
+      this.operator == NonValueOperator.BLANK ||
+      this.operator == NonValueOperator.EMPTY;
+    if (!isNonValueOperator) {
+      throw new Error(`Invalid NonValue operator: ${this.operator}`);
+    }
+  }
+  abstract evaluate(obj: any): boolean;
+}
+
 class NullCondition extends NonValueCondition {
   constructor(property: string) {
     super(property, NonValueOperator.NULL);
@@ -171,6 +154,24 @@ class EmptyCondition extends NonValueCondition {
     const targetValue = obj[this.property];
     return targetValue == null || targetValue == undefined || targetValue == "";
   }
+}
+
+// String classes
+abstract class StringValueCondition implements Condition {
+  constructor(
+    public property: string,
+    public operator: StringValueOperator,
+    public value: any
+  ) {
+    let isStringValueOperator =
+      this.operator == StringValueOperator.SW ||
+      this.operator == StringValueOperator.CT ||
+      this.operator == StringValueOperator.EW;
+    if (!isStringValueOperator) {
+      throw new Error(`Invalid StringValueOperator: ${this.operator}`);
+    }
+  }
+  abstract evaluate(obj: any): boolean;
 }
 
 class StartsWithCondition extends StringValueCondition {
@@ -224,7 +225,7 @@ class LogicalCondition implements Condition {
       case LogicalOperator.NOT:
         return !this.expressions[0].evaluate(obj);
       default:
-        throw new Error(`Unknown logical operator: ${this.operator}`);
+        throw new Error(`Unknown LogicalOperator: ${this.operator}`);
     }
   }
 }
@@ -248,11 +249,6 @@ class NotCondition extends LogicalCondition {
 }
 
 export {
-  StringValueCondition,
-  LogicalCondition,
-  AndCondition,
-  OrCondition,
-  NotCondition,
   EqualCondition,
   NotEqualCondition,
   LessThanCondition,
@@ -265,6 +261,9 @@ export {
   StartsWithCondition,
   ContainsCondition,
   EndsWithCondition,
+  AndCondition,
+  OrCondition,
+  NotCondition,
 };
 
 /* Example usage
