@@ -1,7 +1,9 @@
 // Enums for operators
-enum ValueOperator {
+enum EqualityOperator {
   EQ = "EQ",
   NE = "NE",
+}
+enum NumericOperator {
   LT = "LT",
   LTE = "LTE",
   GT = "GT",
@@ -20,7 +22,7 @@ enum LogicalOperator {
   NOT = "NOT",
 }
 
-enum StringValueOperator {
+enum StringOperator {
   SW = "SW",
   CT = "CT",
   EW = "EW",
@@ -31,30 +33,19 @@ interface Condition {
   evaluate(obj: any): boolean;
 }
 
-// value classes
-abstract class ValueCondition implements Condition {
+// equality classes
+abstract class EqualityCondition implements Condition {
   constructor(
     public property: string,
-    public operator: ValueOperator,
+    public operator: EqualityOperator,
     public value: any
-  ) {
-    let isValueOperator =
-      this.operator == ValueOperator.EQ ||
-      this.operator == ValueOperator.NE ||
-      this.operator == ValueOperator.LT ||
-      this.operator == ValueOperator.LTE ||
-      this.operator == ValueOperator.GT ||
-      this.operator == ValueOperator.GTE;
-    if (!isValueOperator) {
-      throw new Error(`Invalid ValueOperator: ${this.operator}`);
-    }
-  }
+  ) {}
   abstract evaluate(obj: any): boolean;
 }
 
-class EqualCondition extends ValueCondition {
+class EqualCondition extends EqualityCondition {
   constructor(property: string, value: any) {
-    super(property, ValueOperator.EQ, value);
+    super(property, EqualityOperator.EQ, value);
   }
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
@@ -62,9 +53,9 @@ class EqualCondition extends ValueCondition {
   }
 }
 
-class NotEqualCondition extends ValueCondition {
+class NotEqualCondition extends EqualityCondition {
   constructor(property: string, value: any) {
-    super(property, ValueOperator.NE, value);
+    super(property, EqualityOperator.NE, value);
   }
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
@@ -72,42 +63,84 @@ class NotEqualCondition extends ValueCondition {
   }
 }
 
-class LessThanCondition extends ValueCondition {
-  constructor(property: string, value: any) {
-    super(property, ValueOperator.LT, value);
+// numeric classes
+abstract class NumericCondition implements Condition {
+  constructor(
+    public property: string,
+    public operator: NumericOperator,
+    public value: number
+  ) {
+    let isNumericOperator =
+      this.operator == NumericOperator.LT ||
+      this.operator == NumericOperator.LTE ||
+      this.operator == NumericOperator.GT ||
+      this.operator == NumericOperator.GTE;
+    if (!isNumericOperator) {
+      throw new Error(`Invalid NumericOperator: ${this.operator}`);
+    }
   }
+
+  abstract evaluate(obj: any): boolean;
+
+  protected checkTargetValueType(targetValue: any): void {
+    if (typeof targetValue !== "number") {
+      throw new Error(
+        `Target value for property '${
+          this.property
+        }' must be a number. Received: ${typeof targetValue}`
+      );
+    }
+  }
+}
+
+class LessThanCondition extends NumericCondition {
+  constructor(property: string, value: number) {
+    super(property, NumericOperator.LT, value);
+  }
+
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
+    this.checkTargetValueType(targetValue);
+
     return targetValue < this.value;
   }
 }
 
-class LessThanOrEqualCondition extends ValueCondition {
-  constructor(property: string, value: any) {
-    super(property, ValueOperator.LTE, value);
+class LessThanOrEqualCondition extends NumericCondition {
+  constructor(property: string, value: number) {
+    super(property, NumericOperator.LTE, value);
   }
+
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
+    this.checkTargetValueType(targetValue);
+
     return targetValue <= this.value;
   }
 }
 
-class GreaterThanCondition extends ValueCondition {
-  constructor(property: string, value: any) {
-    super(property, ValueOperator.GT, value);
+class GreaterThanCondition extends NumericCondition {
+  constructor(property: string, value: number) {
+    super(property, NumericOperator.GT, value);
   }
+
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
+    this.checkTargetValueType(targetValue);
+
     return targetValue > this.value;
   }
 }
 
-class GreaterThanOrEqualCondition extends ValueCondition {
-  constructor(property: string, value: any) {
-    super(property, ValueOperator.GTE, value);
+class GreaterThanOrEqualCondition extends NumericCondition {
+  constructor(property: string, value: number) {
+    super(property, NumericOperator.GTE, value);
   }
+
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
+    this.checkTargetValueType(targetValue);
+
     return targetValue >= this.value;
   }
 }
@@ -160,15 +193,15 @@ class EmptyCondition extends NonValueCondition {
 abstract class StringValueCondition implements Condition {
   constructor(
     public property: string,
-    public operator: StringValueOperator,
+    public operator: StringOperator,
     public value: any
   ) {
-    let isStringValueOperator =
-      this.operator == StringValueOperator.SW ||
-      this.operator == StringValueOperator.CT ||
-      this.operator == StringValueOperator.EW;
-    if (!isStringValueOperator) {
-      throw new Error(`Invalid StringValueOperator: ${this.operator}`);
+    let isStringOperator =
+      this.operator == StringOperator.SW ||
+      this.operator == StringOperator.CT ||
+      this.operator == StringOperator.EW;
+    if (!isStringOperator) {
+      throw new Error(`Invalid StringOperator: ${this.operator}`);
     }
   }
   abstract evaluate(obj: any): boolean;
@@ -176,7 +209,7 @@ abstract class StringValueCondition implements Condition {
 
 class StartsWithCondition extends StringValueCondition {
   constructor(property: string, value: string) {
-    super(property, StringValueOperator.SW, value);
+    super(property, StringOperator.SW, value);
   }
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
@@ -186,7 +219,7 @@ class StartsWithCondition extends StringValueCondition {
 
 class ContainsCondition extends StringValueCondition {
   constructor(property: string, value: any) {
-    super(property, StringValueOperator.CT, value);
+    super(property, StringOperator.CT, value);
   }
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
@@ -196,7 +229,7 @@ class ContainsCondition extends StringValueCondition {
 
 class EndsWithCondition extends StringValueCondition {
   constructor(property: string, value: any) {
-    super(property, StringValueOperator.EW, value);
+    super(property, StringOperator.EW, value);
   }
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];

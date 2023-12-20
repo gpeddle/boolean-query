@@ -27,7 +27,7 @@ describe("Boolean Query Language DSL", () => {
     propUndefined: undefined,
   };
 
-  describe("Conditional Operators", () => {
+  describe("Equality Operators", () => {
     test("EQ operator should evaluate to true when property is equal to value", () => {
       const condition = new EqualCondition("FirstName", "John");
       expect(condition.evaluate(testPerson)).toBeTruthy();
@@ -37,7 +37,9 @@ describe("Boolean Query Language DSL", () => {
       const condition = new NotEqualCondition("FirstName", "William");
       expect(condition.evaluate(testPerson)).toBeTruthy();
     });
+  });
 
+  describe("Numeric Operators", () => {
     test("LT operator should evaluate to true when property is less than to value", () => {
       const condition = new LessThanCondition("Height", 73);
       expect(condition.evaluate(testPerson)).toBeTruthy();
@@ -66,7 +68,9 @@ describe("Boolean Query Language DSL", () => {
       const condition = new GreaterThanOrEqualCondition("Height", 72);
       expect(condition.evaluate(testPerson)).toBeTruthy();
     });
+  });
 
+  describe("String Operators", () => {
     test("SW operator should evaluate to true when property starts with value", () => {
       const condition = new StartsWithCondition("FirstName", "Jo");
       expect(condition.evaluate(testPerson)).toBeTruthy();
@@ -86,7 +90,9 @@ describe("Boolean Query Language DSL", () => {
       const condition = new EndsWithCondition("FirstName", "hn");
       expect(condition.evaluate(testPerson)).toBeTruthy();
     });
+  });
 
+  describe("Non-Value Operators", () => {
     test("NULL operator should evaluate to true when property is null", () => {
       const condition = new NullCondition("propNull");
       expect(condition.evaluate(testPerson)).toBeTruthy();
@@ -144,10 +150,18 @@ describe("Boolean Query Language DSL", () => {
       ]);
       expect(expression.evaluate(testPerson)).toBeTruthy();
     });
+
+    test("Root NOT expressions should evaluate correctly", () => {
+      const expression = new NotCondition([
+        new AndCondition([
+          new NotEqualCondition("FirstName", "John"),
+          new NotEqualCondition("LastName", "Public"),
+        ]),
+        new NotCondition([new GreaterThanCondition("Height", 75)]),
+      ]);
+      expect(expression.evaluate(testPerson)).toBeTruthy();
+    });
   });
 
-  describe("Error Handling", () => {
-    
-    
-  });
+  describe("Error Handling", () => {});
 });
