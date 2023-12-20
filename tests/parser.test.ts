@@ -7,10 +7,10 @@ import {
   ValueCondition,
   NonValueCondition,
   StringValueCondition,
-  LogicalExpression,
-  AndExpression,
-  OrExpression,
-  NotExpression,
+  LogicalCondition,
+  AndCondition,
+  OrCondition,
+  NotCondition,
   EqualCondition,
   NotEqualCondition,
   LessThanCondition,
@@ -119,7 +119,7 @@ describe("Boolean Query Language DSL", () => {
 
   describe("Logical Operators", () => {
     test("AND operator should evaluate to true when all conditions are true", () => {
-      const expression = new AndExpression([
+      const expression = new AndCondition([
         new EqualCondition("FirstName", "John"),
         new LessThanCondition("Height", 75),
       ]);
@@ -127,7 +127,7 @@ describe("Boolean Query Language DSL", () => {
     });
 
     test("OR operator should evaluate to true when at least one condition is true", () => {
-      const expression = new LogicalExpression(LogicalOperator.OR, [
+      const expression = new LogicalCondition(LogicalOperator.OR, [
         new EqualCondition("FirstName", "John"),
         new GreaterThanCondition("Height", 55),
       ]);
@@ -135,7 +135,7 @@ describe("Boolean Query Language DSL", () => {
     });
 
     test("NOT operator should negate the result of its expression", () => {
-      const expression = new NotExpression([
+      const expression = new NotCondition([
         new EqualCondition("FirstName", "Wokka Wokka"),
       ]);
       expect(expression.evaluate(testPerson)).toBeTruthy();
@@ -144,12 +144,12 @@ describe("Boolean Query Language DSL", () => {
 
   describe("Complex Expressions", () => {
     test("Nested logical expressions should evaluate correctly", () => {
-      const expression = new AndExpression([
-        new OrExpression([
+      const expression = new AndCondition([
+        new OrCondition([
           new EqualCondition("FirstName", "John"),
           new EqualCondition("LastName", "Public"),
         ]),
-        new NotExpression([new NullCondition("MiddleName")]),
+        new NotCondition([new NullCondition("MiddleName")]),
       ]);
       expect(expression.evaluate(testPerson)).toBeTruthy();
     });
@@ -158,7 +158,7 @@ describe("Boolean Query Language DSL", () => {
   describe("Error Handling", () => {
     
     test("Should throw error for unknown logical operator", () => {
-      const expression = new LogicalExpression(
+      const expression = new LogicalCondition(
         "UNKNOWN" as LogicalOperator,
         []
       );

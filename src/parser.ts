@@ -26,7 +26,7 @@ enum StringValueOperator {
   EW = "EW",
 }
 
-// Base interface for conditions
+//  interface  and base classes for conditions
 interface Condition {
   evaluate(obj: any): boolean;
 }
@@ -208,8 +208,8 @@ class EndsWithCondition extends StringValueCondition {
   }
 }
 
-// LogicalExpression classes
-class LogicalExpression implements Condition {
+// Logical classes
+class LogicalCondition implements Condition {
   constructor(
     public operator: LogicalOperator,
     public expressions: Condition[]
@@ -229,19 +229,19 @@ class LogicalExpression implements Condition {
   }
 }
 
-class AndExpression extends LogicalExpression {
+class AndCondition extends LogicalCondition {
   constructor(expressions: Condition[]) {
     super(LogicalOperator.AND, expressions);
   }
 }
 
-class OrExpression extends LogicalExpression {
+class OrCondition extends LogicalCondition {
   constructor(expressions: Condition[]) {
     super(LogicalOperator.OR, expressions);
   }
 }
 
-class NotExpression extends LogicalExpression {
+class NotCondition extends LogicalCondition {
   constructor(expressions: Condition[]) {
     super(LogicalOperator.NOT, expressions);
   }
@@ -256,10 +256,10 @@ export {
   ValueCondition,
   NonValueCondition,
   StringValueCondition,
-  LogicalExpression,
-  AndExpression,
-  OrExpression,
-  NotExpression,
+  LogicalCondition,
+  AndCondition,
+  OrCondition,
+  NotCondition,
   EqualCondition,
   NotEqualCondition,
   LessThanCondition,
@@ -283,7 +283,7 @@ let person = {
   TEXT2: null,
 };
 
-const expression = new LogicalExpression(LogicalOperator.AND, [
+const expression = new LogicalCondition(LogicalOperator.AND, [
   new Condition("TEXT1", ConditionalOperator.EQ, "Orange"),
 ]);
 
