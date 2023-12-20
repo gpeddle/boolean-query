@@ -1,13 +1,4 @@
 import {
-  ValueOperator,
-  NonValueOperator,
-  StringValueOperator,
-  LogicalOperator,
-  Condition,
-  ValueCondition,
-  NonValueCondition,
-  StringValueCondition,
-  LogicalCondition,
   AndCondition,
   OrCondition,
   NotCondition,
@@ -127,7 +118,7 @@ describe("Boolean Query Language DSL", () => {
     });
 
     test("OR operator should evaluate to true when at least one condition is true", () => {
-      const expression = new LogicalCondition(LogicalOperator.OR, [
+      const expression = new OrCondition([
         new EqualCondition("FirstName", "John"),
         new GreaterThanCondition("Height", 55),
       ]);
@@ -157,14 +148,6 @@ describe("Boolean Query Language DSL", () => {
 
   describe("Error Handling", () => {
     
-    test("Should throw error for unknown logical operator", () => {
-      const expression = new LogicalCondition(
-        "UNKNOWN" as LogicalOperator,
-        []
-      );
-      expect(() => expression.evaluate(testPerson)).toThrow(
-        "Unknown logical operator"
-      );
-    });
+    
   });
 });

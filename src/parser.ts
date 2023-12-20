@@ -248,13 +248,6 @@ class NotCondition extends LogicalCondition {
 }
 
 export {
-  ValueOperator,
-  NonValueOperator,
-  StringValueOperator,
-  LogicalOperator,
-  Condition,
-  ValueCondition,
-  NonValueCondition,
   StringValueCondition,
   LogicalCondition,
   AndCondition,
