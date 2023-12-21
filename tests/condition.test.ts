@@ -132,9 +132,9 @@ describe("Boolean Query Language DSL", () => {
     });
 
     test("NOT operator should negate the result of its expression", () => {
-      const expression = new NotCondition([
+      const expression = new NotCondition(
         new EqualCondition("FirstName", "Wokka Wokka"),
-      ]);
+      );
       expect(expression.evaluate(testPerson)).toBeTruthy();
     });
   });
@@ -146,19 +146,21 @@ describe("Boolean Query Language DSL", () => {
           new EqualCondition("FirstName", "John"),
           new EqualCondition("LastName", "Public"),
         ]),
-        new NotCondition([new NullCondition("MiddleName")]),
+        new NotCondition(new NullCondition("MiddleName")),
       ]);
       expect(expression.evaluate(testPerson)).toBeTruthy();
     });
 
     test("Root NOT expressions should evaluate correctly", () => {
-      const expression = new NotCondition([
+      const expression = new NotCondition(
         new AndCondition([
-          new NotEqualCondition("FirstName", "John"),
-          new NotEqualCondition("LastName", "Public"),
+          new OrCondition([
+            new EqualCondition("FirstName", "John"),
+            new EqualCondition("LastName", "Public"),
+          ]),
+          new NotCondition(new GreaterThanCondition("Height", 71)),
         ]),
-        new NotCondition([new GreaterThanCondition("Height", 75)]),
-      ]);
+      );
       expect(expression.evaluate(testPerson)).toBeTruthy();
     });
   });

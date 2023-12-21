@@ -245,12 +245,12 @@ class OrCondition extends LogicalCondition {
   }
 }
 
-class NotCondition extends LogicalCondition {
-  constructor(expressions: Condition[]) {
-    super(LogicalOperator.NOT, expressions);
-  }
+class NotCondition implements Condition {
+  operator: any;
+  constructor(
+    public expression: Condition) {}
   evaluate(obj: any): boolean {
-    return !this.expressions[0].evaluate(obj);
+    return !this.expression.evaluate(obj);
   }
 }
 

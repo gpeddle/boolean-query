@@ -4,7 +4,8 @@ import {
   NumericCondition,
   NonValueCondition,
   StringValueCondition,
-  LogicalCondition
+  LogicalCondition,
+  NotCondition
 } from "./condition";
 
 class ConditionSerializer {
@@ -20,9 +21,11 @@ class ConditionSerializer {
       condition instanceof StringValueCondition
     ) {
       return `(${condition.property}^${condition.operator}^${condition.value})`;
+    } else if (condition instanceof NotCondition) {
+      return `(NOT${this.serialize(condition.expression)})`;
     } else if (condition instanceof NonValueCondition) {
-      return `(${condition.property}^${condition.operator})`;
-    } else {
+        return `(${condition.property}^${condition.operator})`;
+      } else {
       throw new Error("Unknown condition type");
     }
   }

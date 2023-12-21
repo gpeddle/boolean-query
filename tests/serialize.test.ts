@@ -29,10 +29,10 @@ describe("ConditionSerializer", () => {
         new StartsWithCondition("name", "J"),
         new EndsWithCondition("name", "n"),
       ]),
-      new NotCondition([new EqualCondition("employmentStatus", "unemployed")]),
+      new NotCondition(new EqualCondition("employmentStatus", "unemployed")),
     ]);
     const expected =
-      "(AND[(age^GT^30),(OR[(name^SW^J),(name^EW^n)]),(NOT[(employmentStatus^EQ^unemployed)])])";
+        "(AND[(age^GT^30),(OR[(name^SW^J),(name^EW^n)]),(NOT(employmentStatus^EQ^unemployed))])";
     expect(ConditionSerializer.serialize(condition)).toBe(expected);
   });
 
