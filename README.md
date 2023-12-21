@@ -6,7 +6,7 @@ A Domain-Specific Language (DSL) for Conditional Logic Evaluation
 
 This DSL allows you to define and evaluate complex conditional logic expressions. It is designed to be both human-readable and programmatically accessible, making it suitable for various use cases where conditional evaluations are required.
 
-For a trivial example of how this works, consider a Javascript object:
+For an example of how this works, consider a Javascript object:
 
 ```
 let person = {
@@ -26,96 +26,155 @@ This expression will evaluate to `false`, because the object's `TEXT1` property 
 
 ## DSL Elements
 
-There are three elements to the DSL:
+There are two elements to the DSL:
 
 - Conditions
 - Conditional Operators
-- Logical Operators
+
+An expression can be composed of any set of Conditions.
 
 ### Conditions
 
-Conditions are the building blocks of expressions. They consist of a property, an operator, and a value. A condition evaluates whether a specific property of an object meets a certain criterion.
+Conditions are the building blocks of expressions. A condition evaluates and returns true or false.
 
-### Conditional Operators
+### Equality Conditions
+
+Consist of a property, an operator, and a value. An Equality condition evaluates whether a specific property of an object meets a criterion based on trivial value comparison. Note that Javascript type coercion is applied where necessary.
 
 - EQ: Equal
 - NE: Not Equal
+
+### Numeric Conditions
+
+Consist of a property, an operator, and a value. A Numeric condition evaluates whether a specific property of an object meets a criterion based upon numerical comparison.
+
 - LT: Less Than
 - LTE: Less Than or Equal
 - GT: Greater Than
 - GTE: Greater Than or Equal
-- NULL: Is Null
-- BLANK: Is Blank
-- EMPTY: Is Null OR Is Blank
+
+### String Conditions
+
+Consist of a property, an operator, and a value. A String condition evaluates whether a specific property of an object meets a criterion based upon string comparison.
+
 - SW: Starts With
 - CT: Contains
 - EW: Ends With
 
-### Logical Operators
+### NonValue Conditions
+
+Consist of a property and an operator. A NonValue condition evaluates whether a specific property of an object matches some variety of emptiness.
+
+- NULL: Is Null
+- BLANK: Is Blank
+- EMPTY: Is Null OR Is Blank
+
+### Logical Conditions
+
+Consist of an array of Conditions. The Conditions may be simple, or complextly nested. A Logical condition evaluates it's children in order from .
 
 - AND: Logical AND
 - OR: Logical OR
-- NOT: Logical NOT
+
+### Unary Conditions
+
+Consist of a single Condition. A Unary condition evaluates its child and then applies its operator.
+
+- NOT: Negates a single Condition
 
 ## Expression Structure:
 
-- Expressions are enclosed in square brackets [] at the root level. 
-- Conditions, logical operators, and groups can be nested within expressions.
-- Parentheses () can be used to define logical groupings and control precedence.
+- Expressions are enclosed in parentheses `()` at the root level. 
+- Conditions, logical operators, and groups are nested within expressions.
+- Square brackets `[]` are used to enclose and array of conditions governed by a logical operator. Commas are used to delimit the array of Conditions.
+- Each Condition is enclosed by parentheses, and the internal elements are delimited by '^'. This allows for trivial parsing. 
 
-Each Condition is enclosed by parentheses, and the internal elements are delimited by '^'. This allows for trivial parsing. 
 
 ## Notes
-The value part of the expression does not need to be quoted, because it will always be found following a '^' character and preceding the end parenthesis. For this reason, whitespace is significant within the parentheses of a Condition expression. This is an explicit design decision.
 
-The internal parts of a Condition expression are structured with infix notation. This enables them the Condition to be easily spoken aloud when discussing. (e.g. `(AND[(TEXT1^SW^Z)])` would be spoken *"TEXT1 starts with 'Z'"*. This an explicit design decision.
+1. The internal parts of Equality, Numeric and String Condition expressions are structured with infix notation. This enables them to be easily spoken aloud when discussing. (e.g. `(TEXT1^SW^Z)` would be spoken *"TEXT1 starts with 'Z'"*. This an explicit design decision.
+
+2. The value part of Equality, Numeric and String Condition expressions do not need to be quoted, because the value will always be found following a '^' character and preceding the end parenthesis. For this reason, whitespace is significant within the parentheses of a Condition expression. This is an explicit design decision.
 
 
 ## Examples:
 
-### StartsWith
+### EqualsCondition
 
-Expression: `(property^SW^substring)`
-Description: Property's value must start with the specified substring.
+- Expression: `(property^EQ^value)`
+- Description: Property's value must equal the specified value. (Note that this is Javascript ==, and type coercion will apply).
 
-### Contains
+### NotEqualsCondition
 
-Expression: `(property^CT^substring)`
+- Expression: `(property^NE^value)`
+- Description: Property's value must not equal the specified value. (Note that this is Javascript !=, and type coercion will apply).
 
-Description: Property's value must contain the specified substring.
+### StartsWithCondition
 
-### EndsWith
+- Expression: `(property^SW^substring)`
+- Description: Property's value must start with the specified substring.
 
-Expression: `(property^EW^substring)`
+### ContainsCondition
 
-Description: Property's value must end with the specified substring.
+- Expression: `(property^CT^substring)`
+- Description: Property's value must contain the specified substring.
 
-### Logical AND
+### EndsWithCondition
 
-Expression: `(AND[(property1^EQ^value1), (property2^EQ^value2)])`
+- Expression: `(property^EW^substring)`
+- Description: Property's value must end with the specified substring.
 
-Description: Both conditions must be true for the expression to evaluate as true.
+### LessThanCondition
 
-### Logical OR
+- Expression: `(property^LT^value)`
+- Description: Property's value must be less than the specified numeric value.
 
-Expression: `(OR[(property1^EQ^value1), (property2^EQ^value2)])`
+### LessOrEqualThanCondition
 
-Description: Either condition must be true for the expression to evaluate as true.
+- Expression: `(property^LTE^value)`
+- Description: Property's value must be lss than opr equal to the specified numeric value.
 
-### Logical NOT
+### GreaterThanCondition
 
-Expression: `(NOT[(property^EQ^value)])`
+- Expression: `(property^GT^value)`
+- Description: Property's value must be greater than the specified numeric value.
 
-Description: Negates the condition, resulting in the opposite evaluation.
+### NullCondition
+
+- Expression: `(property^NULL)`
+- Description: Property's value must be Null.
+
+### BlankCondition
+
+- Expression: `(property^BLANK)`
+- Description: Property's value must be empty string.
+
+### EmptyCondition
+
+- Expression: `(property^EMPTY)`
+- Description: Property's value must be either Null or Empty string.
+
+### AndCondition
+
+- Expression: `(AND[(property1^EQ^value1), (property2^EQ^value2)])`
+- Description: Both conditions must be true for the expression to evaluate as true.
+
+### OrCondition
+
+- Expression: `(OR[(property1^EQ^value1), (property2^EQ^value2)])`
+- Description: Either condition must be true for the expression to evaluate as true.
+
+### NotCondition
+
+- Expression: `(NOT(AND[(property1^EQ^value1),(property2^EQ^value2)]))`
+- Description: Negates the condition, resulting in the opposite evaluation.
 
 ### Complex Expression
 
-Expression: `(OR[(prop1^EQ^val1), (AND(prop2^EQ^val2), NOT(EQ(prop3^EQ^val3))))]`
+- Expression: `(OR[(prop1^EQ^val1), (AND(prop2^EQ^val2), NOT(EQ(prop3^EQ^val3))))]`
+- Description: A combination of conditions and logical operators, demonstrating nested expressions and negations.
 
-
-Description: A combination of conditions and logical operators, demonstrating nested expressions and negations.
-
-## Usage
+## Use Cases
 
 - Provides a clear and structured way to express complex conditional logic.
 - Supports logical operators and nesting for building intricate expressions.
