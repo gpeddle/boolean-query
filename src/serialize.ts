@@ -33,17 +33,19 @@ class ConditionSerializer {
 
 export { ConditionSerializer };
 
-/* Example usage:
+/* 
+// Example Usage:
+
 const complexCondition = new AndCondition([
   new GreaterThanCondition("age", 30),
   new OrCondition([
     new StartsWithCondition("name", "J"),
     new EndsWithCondition("name", "n"),
   ]),
-  new NotCondition([new EqualCondition("employmentStatus", "unemployed")]),
+  new NotCondition(new EqualCondition("employmentStatus", "unemployed")),
 ]);
 
 console.log(ConditionSerializer.serialize(complexCondition));
 
-// produces: (AND[(age^GT^30),(OR[(name^SW^J),(name^EW^n)]),(NOT[(employmentStatus^EQ^unemployed)])])
+// expected output: (AND[(age^GT^30),(OR[(name^SW^J),(name^EW^n)]),(NOT(employmentStatus^EQ^unemployed))])
 */
