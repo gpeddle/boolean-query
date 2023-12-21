@@ -14,7 +14,7 @@ import {
   AndCondition,
   OrCondition,
   NotCondition,
-} from "../src/parser";
+} from "../src/condition";
 
 describe("Boolean Query Language DSL", () => {
   const testPerson = {

@@ -69,16 +69,7 @@ abstract class NumericCondition implements Condition {
     public property: string,
     public operator: NumericOperator,
     public value: number
-  ) {
-    let isNumericOperator =
-      this.operator == NumericOperator.LT ||
-      this.operator == NumericOperator.LTE ||
-      this.operator == NumericOperator.GT ||
-      this.operator == NumericOperator.GTE;
-    if (!isNumericOperator) {
-      throw new Error(`Invalid NumericOperator: ${this.operator}`);
-    }
-  }
+  ) {  }
 
   abstract evaluate(obj: any): boolean;
 
@@ -147,15 +138,7 @@ class GreaterThanOrEqualCondition extends NumericCondition {
 
 // non-value classes
 abstract class NonValueCondition implements Condition {
-  constructor(public property: string, public operator: NonValueOperator) {
-    let isNonValueOperator =
-      this.operator == NonValueOperator.NULL ||
-      this.operator == NonValueOperator.BLANK ||
-      this.operator == NonValueOperator.EMPTY;
-    if (!isNonValueOperator) {
-      throw new Error(`Invalid NonValue operator: ${this.operator}`);
-    }
-  }
+  constructor(public property: string, public operator: NonValueOperator) {  }
   abstract evaluate(obj: any): boolean;
 }
 
@@ -195,15 +178,7 @@ abstract class StringValueCondition implements Condition {
     public property: string,
     public operator: StringOperator,
     public value: any
-  ) {
-    let isStringOperator =
-      this.operator == StringOperator.SW ||
-      this.operator == StringOperator.CT ||
-      this.operator == StringOperator.EW;
-    if (!isStringOperator) {
-      throw new Error(`Invalid StringOperator: ${this.operator}`);
-    }
-  }
+  ) { }
   abstract evaluate(obj: any): boolean;
 }
 
