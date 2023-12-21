@@ -255,6 +255,11 @@ class NotCondition extends LogicalCondition {
 }
 
 export {
+  Condition,
+  NumericCondition,
+  NonValueCondition,
+  StringValueCondition,
+  LogicalCondition,
   EqualCondition,
   NotEqualCondition,
   LessThanCondition,
