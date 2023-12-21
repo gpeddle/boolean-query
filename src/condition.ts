@@ -69,7 +69,7 @@ abstract class NumericCondition implements Condition {
     public property: string,
     public operator: NumericOperator,
     public value: number
-  ) {  }
+  ) {}
 
   abstract evaluate(obj: any): boolean;
 
@@ -138,7 +138,7 @@ class GreaterThanOrEqualCondition extends NumericCondition {
 
 // non-value classes
 abstract class NonValueCondition implements Condition {
-  constructor(public property: string, public operator: NonValueOperator) {  }
+  constructor(public property: string, public operator: NonValueOperator) {}
   abstract evaluate(obj: any): boolean;
 }
 
@@ -178,7 +178,7 @@ abstract class StringValueCondition implements Condition {
     public property: string,
     public operator: StringOperator,
     public value: any
-  ) { }
+  ) {}
   abstract evaluate(obj: any): boolean;
 }
 
@@ -218,29 +218,21 @@ class EndsWithCondition extends StringValueCondition {
 }
 
 // Logical classes
-class LogicalCondition implements Condition {
+abstract class LogicalCondition implements Condition {
   constructor(
     public operator: LogicalOperator,
     public expressions: Condition[]
   ) {}
 
-  evaluate(obj: any): boolean {
-    switch (this.operator) {
-      case LogicalOperator.AND:
-        return this.expressions.every((expr) => expr.evaluate(obj));
-      case LogicalOperator.OR:
-        return this.expressions.some((expr) => expr.evaluate(obj));
-      case LogicalOperator.NOT:
-        return !this.expressions[0].evaluate(obj);
-      default:
-        throw new Error(`Unknown LogicalOperator: ${this.operator}`);
-    }
-  }
+  abstract evaluate(obj: any): boolean;
 }
 
 class AndCondition extends LogicalCondition {
   constructor(expressions: Condition[]) {
     super(LogicalOperator.AND, expressions);
+  }
+  evaluate(obj: any): boolean {
+    return this.expressions.every((expr) => expr.evaluate(obj));
   }
 }
 
@@ -248,11 +240,17 @@ class OrCondition extends LogicalCondition {
   constructor(expressions: Condition[]) {
     super(LogicalOperator.OR, expressions);
   }
+  evaluate(obj: any): boolean {
+    return this.expressions.some((expr) => expr.evaluate(obj));
+  }
 }
 
 class NotCondition extends LogicalCondition {
   constructor(expressions: Condition[]) {
     super(LogicalOperator.NOT, expressions);
+  }
+  evaluate(obj: any): boolean {
+    return !this.expressions[0].evaluate(obj);
   }
 }
 
