@@ -1,6 +1,6 @@
 import {
   Condition,
-  EqualCondition,
+  ComparisonCondition,
   NumericCondition,
   NonValueCondition,
   StringValueCondition,
@@ -16,7 +16,7 @@ class ConditionSerializer {
         .join(",");
       return `(${condition.operator}[${serializedConditions}])`;
     } else if (
-      condition instanceof EqualCondition ||
+      condition instanceof ComparisonCondition ||
       condition instanceof NumericCondition ||
       condition instanceof StringValueCondition
     ) {

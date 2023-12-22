@@ -39,7 +39,7 @@ interface Condition {
 }
 
 // equality classes
-abstract class EqualityCondition implements Condition {
+abstract class ComparisonCondition implements Condition {
   constructor(
     public property: string,
     public operator: EqualityOperator,
@@ -48,7 +48,7 @@ abstract class EqualityCondition implements Condition {
   abstract evaluate(obj: any): boolean;
 }
 
-class EqualCondition extends EqualityCondition {
+class EqualCondition extends ComparisonCondition {
   constructor(property: string, value: any) {
     super(property, EqualityOperator.EQ, value);
   }
@@ -58,7 +58,7 @@ class EqualCondition extends EqualityCondition {
   }
 }
 
-class NotEqualCondition extends EqualityCondition {
+class NotEqualCondition extends ComparisonCondition {
   constructor(property: string, value: any) {
     super(property, EqualityOperator.NE, value);
   }
@@ -255,6 +255,7 @@ class NotCondition implements Condition {
 
 export {
   Condition,
+  ComparisonCondition,
   NumericCondition,
   NonValueCondition,
   StringValueCondition,
