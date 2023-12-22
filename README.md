@@ -37,9 +37,9 @@ An expression can be composed of any set of Conditions.
 
 Conditions are the building blocks of expressions. A condition evaluates and returns true or false.
 
-### Equality Conditions
+### Comparison Conditions
 
-Consist of a property, an operator, and a value. An Equality condition evaluates whether a specific property of an object meets a criterion based on trivial value comparison. Note that Javascript type coercion is applied where necessary.
+Consist of a property, an operator, and a value. A Comparison condition evaluates whether a specific property of an object meets a criterion based on trivial value comparison. Note that Javascript type coercion is applied where necessary.
 
 - EQ: Equal
 - NE: Not Equal
@@ -92,9 +92,9 @@ Consist of a single Condition. A Unary condition evaluates its child and then ap
 
 ## Notes
 
-1. The internal parts of Equality, Numeric and String Condition expressions are structured with infix notation. This enables them to be easily spoken aloud when discussing. (e.g. `(TEXT1^SW^Z)` would be spoken *"TEXT1 starts with 'Z'"*. This an explicit design decision.
+1. The internal parts of Comparison, Numeric and String Condition expressions are structured with infix notation. This enables them to be easily spoken aloud when discussing. (e.g. `(TEXT1^SW^Z)` would be spoken *"TEXT1 starts with 'Z'"*. This an explicit design decision.
 
-2. The value part of Equality, Numeric and String Condition expressions do not need to be quoted, because the value will always be found following a '^' character and preceding the end parenthesis. For this reason, whitespace is significant within the parentheses of a Condition expression. This is an explicit design decision.
+2. The value part of Comparison, Numeric and String Condition expressions do not need to be quoted, because the value will always be found following a '^' character and preceding the end parenthesis. For this reason, whitespace is significant within the parentheses of a Condition expression. This is an explicit design decision.
 
 
 ## Examples:
@@ -108,21 +108,6 @@ Consist of a single Condition. A Unary condition evaluates its child and then ap
 
 - Expression: `(property^NE^value)`
 - Description: Property's value must not equal the specified value. (Note that this is Javascript !=, and type coercion will apply).
-
-### StartsWithCondition
-
-- Expression: `(property^SW^substring)`
-- Description: Property's value must start with the specified substring.
-
-### ContainsCondition
-
-- Expression: `(property^CT^substring)`
-- Description: Property's value must contain the specified substring.
-
-### EndsWithCondition
-
-- Expression: `(property^EW^substring)`
-- Description: Property's value must end with the specified substring.
 
 ### LessThanCondition
 
@@ -138,6 +123,21 @@ Consist of a single Condition. A Unary condition evaluates its child and then ap
 
 - Expression: `(property^GT^value)`
 - Description: Property's value must be greater than the specified numeric value.
+
+### StartsWithCondition
+
+- Expression: `(property^SW^substring)`
+- Description: Property's value must start with the specified substring.
+
+### ContainsCondition
+
+- Expression: `(property^CT^substring)`
+- Description: Property's value must contain the specified substring.
+
+### EndsWithCondition
+
+- Expression: `(property^EW^substring)`
+- Description: Property's value must end with the specified substring.
 
 ### NullCondition
 

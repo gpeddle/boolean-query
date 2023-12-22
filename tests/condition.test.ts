@@ -28,7 +28,7 @@ describe("Boolean Query Language DSL", () => {
     propBlank: "",
   };
 
-  describe("Equality Expressions", () => {
+  describe("Comparison Expressions", () => {
     test("EQ operator should evaluate to true when property is equal to value", () => {
       const condition = new EqualCondition("FirstName", "John");
       expect(condition.evaluate(testPerson)).toBeTruthy();
