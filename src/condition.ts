@@ -3,11 +3,18 @@ enum EqualityOperator {
   EQ = "EQ",
   NE = "NE",
 }
+
 enum NumericOperator {
   LT = "LT",
   LTE = "LTE",
   GT = "GT",
   GTE = "GTE",
+}
+
+enum StringOperator {
+  SW = "SW",
+  CT = "CT",
+  EW = "EW",
 }
 
 enum NonValueOperator {
@@ -22,10 +29,8 @@ enum LogicalOperator {
   NOT = "NOT",
 }
 
-enum StringOperator {
-  SW = "SW",
-  CT = "CT",
-  EW = "EW",
+enum NotOperator {
+  NOT = "NOT",
 }
 
 //  interface for base classes
@@ -65,110 +70,68 @@ class NotEqualCondition extends EqualityCondition {
 
 // numeric classes
 abstract class NumericCondition implements Condition {
+  // Assuming value is always treated as a number or a coercible string
+  protected numericValue: number;
+
   constructor(
     public property: string,
     public operator: NumericOperator,
-    public value: number
-  ) {}
+    public value: number | string
+  ) {
+    if (typeof value === "string" && isNaN(Number(value))) {
+      throw new Error(`Value must be a number or a coercible string. Received: ${value}`);
+    }
+    this.numericValue = Number(value);
+  }
 
   abstract evaluate(obj: any): boolean;
-
-  protected checkTargetValueType(targetValue: any): void {
-    if (typeof targetValue !== "number") {
-      throw new Error(
-        `Target value for property '${
-          this.property
-        }' must be a number. Received: ${typeof targetValue}`
-      );
-    }
-  }
 }
 
 class LessThanCondition extends NumericCondition {
-  constructor(property: string, value: number) {
+  constructor(property: string, value: number | string) {
     super(property, NumericOperator.LT, value);
   }
 
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    this.checkTargetValueType(targetValue);
-
+    const targetValue: any = obj[this.property];
+    //this.checkTargetValueType(targetValue);
     return targetValue < this.value;
   }
 }
 
 class LessThanOrEqualCondition extends NumericCondition {
-  constructor(property: string, value: number) {
+  constructor(property: string, value: number | string) {
     super(property, NumericOperator.LTE, value);
   }
 
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
-    this.checkTargetValueType(targetValue);
-
+    //this.checkTargetValueType(targetValue);
     return targetValue <= this.value;
   }
 }
 
 class GreaterThanCondition extends NumericCondition {
-  constructor(property: string, value: number) {
+  constructor(property: string, value: number | string) {
     super(property, NumericOperator.GT, value);
   }
 
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
-    this.checkTargetValueType(targetValue);
-
+    //this.checkTargetValueType(targetValue);
     return targetValue > this.value;
   }
 }
 
 class GreaterThanOrEqualCondition extends NumericCondition {
-  constructor(property: string, value: number) {
+  constructor(property: string, value: number | string) {
     super(property, NumericOperator.GTE, value);
   }
 
   evaluate(obj: any): boolean {
     const targetValue = obj[this.property];
-    this.checkTargetValueType(targetValue);
-
+    //this.checkTargetValueType(targetValue);
     return targetValue >= this.value;
-  }
-}
-
-// non-value classes
-abstract class NonValueCondition implements Condition {
-  constructor(public property: string, public operator: NonValueOperator) {}
-  abstract evaluate(obj: any): boolean;
-}
-
-class NullCondition extends NonValueCondition {
-  constructor(property: string) {
-    super(property, NonValueOperator.NULL);
-  }
-  evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue == null;
-  }
-}
-
-class BlankCondition extends NonValueCondition {
-  constructor(property: string) {
-    super(property, NonValueOperator.BLANK);
-  }
-  evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue == "";
-  }
-}
-
-class EmptyCondition extends NonValueCondition {
-  constructor(property: string, value: any) {
-    super(property, NonValueOperator.EMPTY);
-  }
-  evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue == null || targetValue == undefined || targetValue == "";
   }
 }
 
@@ -217,6 +180,42 @@ class EndsWithCondition extends StringValueCondition {
   }
 }
 
+// non-value classes
+abstract class NonValueCondition implements Condition {
+  constructor(public property: string, public operator: NonValueOperator) {}
+  abstract evaluate(obj: any): boolean;
+}
+
+class NullCondition extends NonValueCondition {
+  constructor(property: string) {
+    super(property, NonValueOperator.NULL);
+  }
+  evaluate(obj: any): boolean {
+    const targetValue = obj[this.property];
+    return targetValue == null;
+  }
+}
+
+class BlankCondition extends NonValueCondition {
+  constructor(property: string) {
+    super(property, NonValueOperator.BLANK);
+  }
+  evaluate(obj: any): boolean {
+    const targetValue = obj[this.property];
+    return targetValue == "";
+  }
+}
+
+class EmptyCondition extends NonValueCondition {
+  constructor(property: string) {
+    super(property, NonValueOperator.EMPTY);
+  }
+  evaluate(obj: any): boolean {
+    const targetValue = obj[this.property];
+    return targetValue == null || targetValue == undefined || targetValue == "";
+  }
+}
+
 // Logical classes
 abstract class LogicalCondition implements Condition {
   constructor(
@@ -245,10 +244,10 @@ class OrCondition extends LogicalCondition {
   }
 }
 
+// Negation class
 class NotCondition implements Condition {
-  operator: any;
-  constructor(
-    public expression: Condition) {}
+  operator: NotOperator = NotOperator.NOT;
+  constructor(public expression: Condition) {}
   evaluate(obj: any): boolean {
     return !this.expression.evaluate(obj);
   }
@@ -275,6 +274,12 @@ export {
   AndCondition,
   OrCondition,
   NotCondition,
+  EqualityOperator,
+  NumericOperator,
+  NonValueOperator,
+  LogicalOperator,
+  StringOperator,
+  NotOperator,
 };
 
 /* Example usage

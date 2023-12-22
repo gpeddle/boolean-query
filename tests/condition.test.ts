@@ -16,6 +16,8 @@ import {
   NotCondition,
 } from "../src/condition";
 
+import { describe, test, expect } from "@jest/globals";
+
 describe("Boolean Query Language DSL", () => {
   const testPerson = {
     FirstName: "John",
@@ -24,10 +26,9 @@ describe("Boolean Query Language DSL", () => {
     Height: 72,
     propNull: null,
     propBlank: "",
-    propUndefined: undefined,
   };
 
-  describe("Equality Operators", () => {
+  describe("Equality Expressions", () => {
     test("EQ operator should evaluate to true when property is equal to value", () => {
       const condition = new EqualCondition("FirstName", "John");
       expect(condition.evaluate(testPerson)).toBeTruthy();
@@ -39,10 +40,22 @@ describe("Boolean Query Language DSL", () => {
     });
   });
 
-  describe("Numeric Operators", () => {
-    test("LT operator should evaluate to true when property is less than to value", () => {
+  describe("Numeric Expressions", () => {
+
+    test("LT operator should evaluate to true when property is less than numeric value", () => {
       const condition = new LessThanCondition("Height", 73);
       expect(condition.evaluate(testPerson)).toBeTruthy();
+    });
+
+    test("LT operator should evaluate to true when property is less than coerced string value", () => {
+      const condition = new LessThanCondition("Height", "73");
+      expect(condition.evaluate(testPerson)).toBeTruthy();
+    });
+
+    test("LT operator should throw Error when value is not a number or coercible string", () => {
+      expect(() => {
+        new LessThanCondition("Height", "foo");
+      }).toThrowError(new Error("Value must be a number or a coercible string. Received: foo"));
     });
 
     test("LTE operator should evaluate to true when property is less than value", () => {
@@ -54,9 +67,21 @@ describe("Boolean Query Language DSL", () => {
       expect(condition.evaluate(testPerson)).toBeTruthy();
     });
 
+    test("LTE operator should throw Error when value is not a number or coercible string", () => {
+      expect(() => {
+        new LessThanOrEqualCondition("Height", "foo");
+      }).toThrowError(new Error("Value must be a number or a coercible string. Received: foo"));
+    });
+
     test("GT operator should evaluate to true when property is greater than value", () => {
       const condition = new GreaterThanCondition("Height", 71);
       expect(condition.evaluate(testPerson)).toBeTruthy();
+    });
+
+    test("GT operator should throw Error when value is not a number or coercible string", () => {
+      expect(() => {
+        new GreaterThanCondition("Height", "foo");
+      }).toThrowError(new Error("Value must be a number or a coercible string. Received: foo"));
     });
 
     test("GTE operator should evaluate to true when property is greater than value", () => {
@@ -64,13 +89,21 @@ describe("Boolean Query Language DSL", () => {
       expect(condition.evaluate(testPerson)).toBeTruthy();
     });
 
-    test("GTE operator should evaluate to true when property is equal to value", () => {
-      const condition = new GreaterThanOrEqualCondition("Height", 72);
+    test("GTE operator should evaluate to true when property is equal to coercible value", () => {
+      const condition = new GreaterThanOrEqualCondition("Height", "72");
       expect(condition.evaluate(testPerson)).toBeTruthy();
     });
+
+    test("GTE operator should throw Error when value is not a number or coercible string", () => {
+      expect(() => {
+        new GreaterThanOrEqualCondition("Height", "foo");
+      }).toThrowError(new Error("Value must be a number or a coercible string. Received: foo"));
+    });
+
+
   });
 
-  describe("String Operators", () => {
+  describe("String Expressions", () => {
     test("SW operator should evaluate to true when property starts with value", () => {
       const condition = new StartsWithCondition("FirstName", "Jo");
       expect(condition.evaluate(testPerson)).toBeTruthy();
@@ -92,7 +125,7 @@ describe("Boolean Query Language DSL", () => {
     });
   });
 
-  describe("Non-Value Operators", () => {
+  describe("Non-Value Expressions", () => {
     test("NULL operator should evaluate to true when property is null", () => {
       const condition = new NullCondition("propNull");
       expect(condition.evaluate(testPerson)).toBeTruthy();
@@ -104,17 +137,18 @@ describe("Boolean Query Language DSL", () => {
     });
 
     test("EMPTY operator should evaluate to true when property is empty string", () => {
-      const condition = new EmptyCondition("propUndefined", "");
+      const condition = new EmptyCondition("propNull");
       expect(condition.evaluate(testPerson)).toBeTruthy();
     });
 
-    test("EMPTY operator should evaluate to true when property is undefined", () => {
-      const condition = new EmptyCondition("propUndefined", undefined);
+    test("EMPTY operator should evaluate to true when property is empty string", () => {
+      const condition = new EmptyCondition("propBlank");
       expect(condition.evaluate(testPerson)).toBeTruthy();
     });
+
   });
 
-  describe("Logical Operators", () => {
+  describe("Logical Expressions", () => {
     test("AND operator should evaluate to true when all conditions are true", () => {
       const expression = new AndCondition([
         new EqualCondition("FirstName", "John"),
@@ -131,6 +165,15 @@ describe("Boolean Query Language DSL", () => {
       expect(expression.evaluate(testPerson)).toBeTruthy();
     });
 
+    test("NOT operator should negate the result of its expression", () => {
+      const expression = new NotCondition(
+        new EqualCondition("FirstName", "Wokka Wokka"),
+      );
+      expect(expression.evaluate(testPerson)).toBeTruthy();
+    });
+  });
+
+  describe("Negation Expressions", () => {
     test("NOT operator should negate the result of its expression", () => {
       const expression = new NotCondition(
         new EqualCondition("FirstName", "Wokka Wokka"),
