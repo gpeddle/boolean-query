@@ -3,10 +3,10 @@
 A Domain-Specific Language (DSL) for Conditional Logic Evaluation
 
 
-## Build Status
+## Status
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gpeddle_boolean-query&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gpeddle_boolean-query)
 [![Node.js CI](https://github.com/gpeddle/boolean-query/actions/workflows/ci.yml/badge.svg)](https://github.com/gpeddle/boolean-query/actions/workflows/ci.yml)
-
 
 ## Overview
 
@@ -177,7 +177,7 @@ Consist of a single Condition. A Unary condition evaluates its child and then ap
 
 ### Complex Expression
 
-- Expression: `(OR[(prop1^EQ^val1), (AND(prop2^EQ^val2), NOT(EQ(prop3^EQ^val3))))]`
+- Expression: `(OR[(prop1^EQ^val1),(prop2^EQ^val2),(NOT(prop3^EQ^val3))])`
 - Description: A combination of conditions and logical operators, demonstrating nested expressions and negations.
 
 ## Use Cases
