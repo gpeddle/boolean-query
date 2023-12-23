@@ -94,7 +94,6 @@ class LessThanCondition extends NumericCondition {
 
   evaluate(obj: any): boolean {
     const propertyValue: any = obj[this.property];
-    //this.checkpropertyValueType(propertyValue);
     return propertyValue < this.testValue;
   }
 }

@@ -70,7 +70,6 @@ describe("Tokenizer", () => {
       { type: TokenType.CloseParenthesis, value: ")" },
     ];
     const received: TokenObject[] = tokenize(expression);
-    console.log(received);
     expect(received).toEqual(expected);
   });
 

@@ -1,19 +1,18 @@
-type Token = string;
 
 enum TokenType {
-    OpenParenthesis,
-    CloseParenthesis,
-    OpenBracket,
-    CloseBracket,
-    Operator,
-    Operand,
-    Separator,
-    Delimiter,
+    OpenParenthesis = 1,
+    CloseParenthesis = 2,
+    OpenBracket = 3,
+    CloseBracket = 4,
+    Operator = 5,
+    Operand = 6,
+    Separator = 7,
+    Delimiter = 8,
 }
 
 interface TokenObject {
     type: TokenType;
-    value: Token;
+    value: string;
 }
 
 function tokenize(expression: string): TokenObject[] {
