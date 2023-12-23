@@ -29,7 +29,7 @@ A BooleanQuery expression can be written that will allow us to logically test th
 
 `(TEXT1^EQ^Blue)`
 
-This expression will evaluate to `false`, because the object's `TEXT1` property is not the specified test value.
+This expression will evaluate to `false`, because the object's `TEXT1` property is not the specified test value `Blue`.
 
 ## Use Cases
 
