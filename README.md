@@ -29,7 +29,14 @@ A BooleanQuery expression can be written that will allow us to logically test th
 
 `(TEXT1^EQ^Blue)`
 
-This expression will evaluate to `false`, because the object's `TEXT1` property is not the specified value.
+This expression will evaluate to `false`, because the object's `TEXT1` property is not the specified test value.
+
+## Use Cases
+
+- Provides a clear and structured way to express complex conditional logic.
+- Supports logical operators and nesting for building intricate expressions.
+- Can be used for filtering, validation, or any scenario requiring conditional evaluations.
+- Suitable for integration with user interfaces for visual expression construction.
 
 ## DSL Elements
 
@@ -108,27 +115,27 @@ Consist of a single Condition. A Unary condition evaluates its child and then ap
 
 ### EqualsCondition
 
-- Expression: `(property^EQ^value)`
+- Expression: `(property^EQ^testValue)`
 - Description: Property's value must equal the specified value. (Note that this is Javascript ==, and type coercion will apply).
 
 ### NotEqualsCondition
 
-- Expression: `(property^NE^value)`
+- Expression: `(property^NE^testValue)`
 - Description: Property's value must not equal the specified value. (Note that this is Javascript !=, and type coercion will apply).
 
 ### LessThanCondition
 
-- Expression: `(property^LT^value)`
+- Expression: `(property^LT^testValue)`
 - Description: Property's value must be less than the specified numeric value.
 
 ### LessOrEqualThanCondition
 
-- Expression: `(property^LTE^value)`
+- Expression: `(property^LTE^testValue)`
 - Description: Property's value must be lss than opr equal to the specified numeric value.
 
 ### GreaterThanCondition
 
-- Expression: `(property^GT^value)`
+- Expression: `(property^GT^testValue)`
 - Description: Property's value must be greater than the specified numeric value.
 
 ### StartsWithCondition
@@ -163,17 +170,17 @@ Consist of a single Condition. A Unary condition evaluates its child and then ap
 
 ### AndCondition
 
-- Expression: `(AND[(property1^EQ^value1), (property2^EQ^value2)])`
+- Expression: `(AND[(property1^EQ^testValue1), (property2^EQ^testValue2)])`
 - Description: Both conditions must be true for the expression to evaluate as true.
 
 ### OrCondition
 
-- Expression: `(OR[(property1^EQ^value1), (property2^EQ^value2)])`
+- Expression: `(OR[(property1^EQ^testValue1), (property2^EQ^testValue2)])`
 - Description: Either condition must be true for the expression to evaluate as true.
 
 ### NotCondition
 
-- Expression: `(NOT(AND[(property1^EQ^value1),(property2^EQ^value2)]))`
+- Expression: `(NOT(AND[(property1^EQ^testValue1),(property2^EQ^testValue2)]))`
 - Description: Negates the condition, resulting in the opposite evaluation.
 
 ### Complex Expression
@@ -181,9 +188,3 @@ Consist of a single Condition. A Unary condition evaluates its child and then ap
 - Expression: `(OR[(prop1^EQ^val1),(prop2^EQ^val2),(NOT(prop3^EQ^val3))])`
 - Description: A combination of conditions and logical operators, demonstrating nested expressions and negations.
 
-## Use Cases
-
-- Provides a clear and structured way to express complex conditional logic.
-- Supports logical operators and nesting for building intricate expressions.
-- Can be used for filtering, validation, or any scenario requiring conditional evaluations.
-- Suitable for integration with user interfaces for visual expression construction.
