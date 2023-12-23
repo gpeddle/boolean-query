@@ -2,8 +2,13 @@
   "name": "boolean-query",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
+    "build": "tsc",
     "test": "jest --verbose --coverage"
   },
   "keywords": [],
