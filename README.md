@@ -60,7 +60,7 @@ Consist of a property, an operator, and a value. A Comparison condition evaluate
 
 ### Numeric Conditions
 
-Consist of a property, an operator, and a value. A Numeric condition evaluates whether a specific property of an object meets a criterion based upon numerical comparison.
+Consists of a property, an operator, and a value. A Numeric condition evaluates whether a specific property of an object meets a criterion based upon numerical comparison.
 
 - LT: Less Than
 - LTE: Less Than or Equal
@@ -69,7 +69,7 @@ Consist of a property, an operator, and a value. A Numeric condition evaluates w
 
 ### String Conditions
 
-Consist of a property, an operator, and a value. A String condition evaluates whether a specific property of an object meets a criterion based upon string comparison.
+Consists of a property, an operator, and a value. A String condition evaluates whether a specific property of an object meets a criterion based upon string comparison.
 
 - SW: Starts With
 - CT: Contains
@@ -77,7 +77,7 @@ Consist of a property, an operator, and a value. A String condition evaluates wh
 
 ### NonValue Conditions
 
-Consist of a property and an operator. A NonValue condition evaluates whether a specific property of an object matches some variety of emptiness.
+Consists of a property and an operator. A NonValue condition evaluates whether a specific property of an object matches some variety of emptiness.
 
 - NULL: Is Null
 - BLANK: Is Blank
@@ -85,23 +85,23 @@ Consist of a property and an operator. A NonValue condition evaluates whether a 
 
 ### Logical Conditions
 
-Consist of an array of Conditions. The Conditions may be simple, or complextly nested. A Logical condition evaluates it's children in order from .
+Consists of an array of Conditions. The Conditions may be simple, or complexly nested. A Logical condition evaluates all children to arrive at a result. There is no short-circuit.
 
 - AND: Logical AND
 - OR: Logical OR
 
 ### Unary Conditions
 
-Consist of a single Condition. A Unary condition evaluates its child and then applies its operator.
+Consists of a single Condition. A Unary condition evaluates its child and then applies its operator.
 
 - NOT: Negates a single Condition
 
 ## Expression Structure:
 
 - Expressions are enclosed in parentheses `()` at the root level. 
-- Conditions, logical operators, and groups are nested within expressions.
-- Square brackets `[]` are used to enclose and array of conditions governed by a logical operator. Commas are used to delimit the array of Conditions.
-- Each Condition is enclosed by parentheses, and the internal elements are delimited by '^'. This allows for trivial parsing. 
+- Value Conditions an Logical Conditions are nested within expressions.
+- Square brackets `[]` are used to enclose comma-delimited array of conditions governed by a logical operator.
+- Each Condition is enclosed by parentheses, and the internal elements are separated by '^'. This allows for trivial parsing. 
 
 
 ## Notes
