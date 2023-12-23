@@ -17,7 +17,7 @@ import {
   NotCondition,
 } from "../src/condition";
 
-import { ConditionSerializer } from "../src/serialize";
+import { ConditionSerializer } from "../src/serializer";
 
 describe("ConditionSerializer", () => {
   describe("Equality Expressions", () => {
