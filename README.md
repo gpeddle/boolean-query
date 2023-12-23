@@ -2,6 +2,12 @@
 
 A Domain-Specific Language (DSL) for Conditional Logic Evaluation
 
+
+## Build Status
+
+[![Node.js CI](https://github.com/gpeddle/boolean-query/actions/workflows/ci.yml/badge.svg)](https://github.com/gpeddle/boolean-query/actions/workflows/ci.yml)
+
+
 ## Overview
 
 This DSL allows you to define and evaluate complex conditional logic expressions. It is designed to be both human-readable and programmatically accessible, making it suitable for various use cases where conditional evaluations are required.
