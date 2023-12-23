@@ -1,4 +1,4 @@
-<img src="https://github.com/gpeddle/boolean-query/blob/main/boolean-query-logo.png" width="200" height="200" alt="Boolean Query Language Logo">
+<img src="https://github.com/gpeddle/boolean-query/blob/main/boolean-query-logo.png" width="50" height="50" alt="Boolean Query Language Logo">
 
 # Boolean Query Language
 
