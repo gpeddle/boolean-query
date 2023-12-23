@@ -20,7 +20,7 @@ class ConditionSerializer {
       condition instanceof NumericCondition ||
       condition instanceof StringValueCondition
     ) {
-      return `(${condition.property}^${condition.operator}^${condition.value})`;
+      return `(${condition.property}^${condition.operator}^${condition.testValue})`;
     } else if (condition instanceof NotCondition) {
       return `(NOT${this.serialize(condition.expression)})`;
     } else if (condition instanceof NonValueCondition) {
