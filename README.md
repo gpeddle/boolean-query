@@ -115,27 +115,27 @@ Consist of a single Condition. A Unary condition evaluates its child and then ap
 
 ### EqualsCondition
 
-- Expression: `(property^EQ^testValue)`
+- Expression: `(property^EQ^value)`
 - Description: Property's value must equal the specified value. (Note that this is Javascript ==, and type coercion will apply).
 
 ### NotEqualsCondition
 
-- Expression: `(property^NE^testValue)`
+- Expression: `(property^NE^value)`
 - Description: Property's value must not equal the specified value. (Note that this is Javascript !=, and type coercion will apply).
 
 ### LessThanCondition
 
-- Expression: `(property^LT^testValue)`
+- Expression: `(property^LT^value)`
 - Description: Property's value must be less than the specified numeric value.
 
 ### LessOrEqualThanCondition
 
-- Expression: `(property^LTE^testValue)`
+- Expression: `(property^LTE^value)`
 - Description: Property's value must be lss than opr equal to the specified numeric value.
 
 ### GreaterThanCondition
 
-- Expression: `(property^GT^testValue)`
+- Expression: `(property^GT^value)`
 - Description: Property's value must be greater than the specified numeric value.
 
 ### StartsWithCondition
@@ -170,21 +170,21 @@ Consist of a single Condition. A Unary condition evaluates its child and then ap
 
 ### AndCondition
 
-- Expression: `(AND[(property1^EQ^testValue1), (property2^EQ^testValue2)])`
+- Expression: `(AND[(property1^EQ^value1), (property2^EQ^value2)])`
 - Description: Both conditions must be true for the expression to evaluate as true.
 
 ### OrCondition
 
-- Expression: `(OR[(property1^EQ^testValue1), (property2^EQ^testValue2)])`
+- Expression: `(OR[(property1^EQ^value1), (property2^EQ^value2)])`
 - Description: Either condition must be true for the expression to evaluate as true.
 
 ### NotCondition
 
-- Expression: `(NOT(AND[(property1^EQ^testValue1),(property2^EQ^testValue2)]))`
+- Expression: `(NOT(AND[(property1^EQ^value1),(property2^EQ^value2)]))`
 - Description: Negates the condition, resulting in the opposite evaluation.
 
 ### Complex Expression
 
-- Expression: `(OR[(prop1^EQ^val1),(prop2^EQ^val2),(NOT(prop3^EQ^val3))])`
+- Expression: `(OR[(prop1^EQ^value1),(prop2^EQ^value2),(NOT(prop3^EQ^value3))])`
 - Description: A combination of conditions and logical operators, demonstrating nested expressions and negations.
 
