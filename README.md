@@ -1,7 +1,8 @@
+<img src="https://github.com/gpeddle/boolean-query/blob/main/boolean-query-logo.png" width="200" height="200" alt="Boolean Query Language Logo">
+
 # Boolean Query Language
 
 A Domain-Specific Language (DSL) for Conditional Logic Evaluation
-
 
 ## Status
 
