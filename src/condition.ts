@@ -43,28 +43,28 @@ abstract class ComparisonCondition implements Condition {
   constructor(
     public property: string,
     public operator: EqualityOperator,
-    public value: any
+    public testValue: any
   ) {}
   abstract evaluate(obj: any): boolean;
 }
 
 class EqualCondition extends ComparisonCondition {
-  constructor(property: string, value: any) {
-    super(property, EqualityOperator.EQ, value);
+  constructor(property: string, testValue: any) {
+    super(property, EqualityOperator.EQ, testValue);
   }
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue == this.value;
+    const propertyValue = obj[this.property];
+    return propertyValue == this.testValue;
   }
 }
 
 class NotEqualCondition extends ComparisonCondition {
-  constructor(property: string, value: any) {
-    super(property, EqualityOperator.NE, value);
+  constructor(property: string, testValue: any) {
+    super(property, EqualityOperator.NE, testValue);
   }
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue != this.value;
+    const propertyValue = obj[this.property];
+    return propertyValue != this.testValue;
   }
 }
 
@@ -76,62 +76,59 @@ abstract class NumericCondition implements Condition {
   constructor(
     public property: string,
     public operator: NumericOperator,
-    public value: number | string
+    public testValue: number | string
   ) {
-    if (typeof value === "string" && isNaN(Number(value))) {
-      throw new Error(`Value must be a number or a coercible string. Received: ${value}`);
+    if (typeof testValue === "string" && isNaN(Number(testValue))) {
+      throw new Error(`Value must be a number or a coercible string. Received: ${testValue}`);
     }
-    this.numericValue = Number(value);
+    this.numericValue = Number(testValue);
   }
 
   abstract evaluate(obj: any): boolean;
 }
 
 class LessThanCondition extends NumericCondition {
-  constructor(property: string, value: number | string) {
-    super(property, NumericOperator.LT, value);
+  constructor(property: string, testValue: number | string) {
+    super(property, NumericOperator.LT, testValue);
   }
 
   evaluate(obj: any): boolean {
-    const targetValue: any = obj[this.property];
-    //this.checkTargetValueType(targetValue);
-    return targetValue < this.value;
+    const propertyValue: any = obj[this.property];
+    //this.checkpropertyValueType(propertyValue);
+    return propertyValue < this.testValue;
   }
 }
 
 class LessThanOrEqualCondition extends NumericCondition {
-  constructor(property: string, value: number | string) {
-    super(property, NumericOperator.LTE, value);
+  constructor(property: string, testValue: number | string) {
+    super(property, NumericOperator.LTE, testValue);
   }
 
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    //this.checkTargetValueType(targetValue);
-    return targetValue <= this.value;
+    const propertyValue = obj[this.property];
+    return propertyValue <= this.testValue;
   }
 }
 
 class GreaterThanCondition extends NumericCondition {
-  constructor(property: string, value: number | string) {
-    super(property, NumericOperator.GT, value);
+  constructor(property: string, testValue: number | string) {
+    super(property, NumericOperator.GT, testValue);
   }
 
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    //this.checkTargetValueType(targetValue);
-    return targetValue > this.value;
+    const propertyValue = obj[this.property];
+    return propertyValue > this.testValue;
   }
 }
 
 class GreaterThanOrEqualCondition extends NumericCondition {
-  constructor(property: string, value: number | string) {
-    super(property, NumericOperator.GTE, value);
+  constructor(property: string, testValue: number | string) {
+    super(property, NumericOperator.GTE, testValue);
   }
 
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    //this.checkTargetValueType(targetValue);
-    return targetValue >= this.value;
+    const propertyValue = obj[this.property];
+    return propertyValue >= this.testValue;
   }
 }
 
@@ -140,42 +137,42 @@ abstract class StringValueCondition implements Condition {
   constructor(
     public property: string,
     public operator: StringOperator,
-    public value: any
+    public testValue: any
   ) {}
   abstract evaluate(obj: any): boolean;
 }
 
 class StartsWithCondition extends StringValueCondition {
-  constructor(property: string, value: string) {
-    super(property, StringOperator.SW, value);
+  constructor(property: string, testValue: string) {
+    super(property, StringOperator.SW, testValue);
   }
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue.substring(0, this.value.length) == this.value;
+    const propertyValue = obj[this.property];
+    return propertyValue.substring(0, this.testValue.length) == this.testValue;
   }
 }
 
 class ContainsCondition extends StringValueCondition {
-  constructor(property: string, value: any) {
-    super(property, StringOperator.CT, value);
+  constructor(property: string, testValue: any) {
+    super(property, StringOperator.CT, testValue);
   }
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue.includes(this.value);
+    const propertyValue = obj[this.property];
+    return propertyValue.includes(this.testValue);
   }
 }
 
 class EndsWithCondition extends StringValueCondition {
-  constructor(property: string, value: any) {
-    super(property, StringOperator.EW, value);
+  constructor(property: string, testValue: any) {
+    super(property, StringOperator.EW, testValue);
   }
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
+    const propertyValue = obj[this.property];
     return (
-      targetValue.substring(
-        targetValue.length - this.value.length,
-        targetValue.length
-      ) == this.value
+      propertyValue.substring(
+        propertyValue.length - this.testValue.length,
+        propertyValue.length
+      ) == this.testValue
     );
   }
 }
@@ -191,8 +188,8 @@ class NullCondition extends NonValueCondition {
     super(property, NonValueOperator.NULL);
   }
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue == null;
+    const propertyValue = obj[this.property];
+    return propertyValue == null;
   }
 }
 
@@ -201,8 +198,8 @@ class BlankCondition extends NonValueCondition {
     super(property, NonValueOperator.BLANK);
   }
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue == "";
+    const propertyValue = obj[this.property];
+    return propertyValue == "";
   }
 }
 
@@ -211,8 +208,8 @@ class EmptyCondition extends NonValueCondition {
     super(property, NonValueOperator.EMPTY);
   }
   evaluate(obj: any): boolean {
-    const targetValue = obj[this.property];
-    return targetValue == null || targetValue == undefined || targetValue == "";
+    const propertyValue = obj[this.property];
+    return propertyValue == null || propertyValue == undefined || propertyValue == "";
   }
 }
 
