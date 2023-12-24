@@ -188,3 +188,6 @@ Consists of a single Condition. A Unary condition evaluates its child and then a
 - Expression: `(OR[(prop1^EQ^value1),(prop2^EQ^value2),(NOT(prop3^EQ^value3))])`
 - Description: A combination of conditions and logical operators, demonstrating nested expressions and negations.
 
+## License
+
+This project is licensed under the MIT License.
